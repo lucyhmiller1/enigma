@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enigma Machine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+        margin: 40px auto; /* Center horizontally and move down slightly */
+        padding: 20px;
+        width: 60%; /* Make the box skinnier */
+        max-width: 600px; /* Optional: Set a max width */
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center; /* Center the text inside the box */
+        }
+        .rotor-visual {
+        position: absolute;
+        top: 40px; /* Align with the "Enigma Machine" box */
+        right: 10%; /* Position 3/4th of the way across the screen */
+        margin: 20px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 200px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .outputs {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .output-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            word-wrap: break-word; /* Ensures long words or text wrap */
+            overflow-wrap: break-word; /* Modern equivalent for wrapping */
+            white-space: normal; /* Allows text to wrap to the next line */
+            max-width: 100%; /* Ensures it doesn't exceed the container width */
+        }
+        .output-item span {
+            margin-right: 10px;
+        }
+        .rotor {
+            text-align: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .rotor-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .rotor-controls form {
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enigma Machine</h1>
+        <form method="POST" autocomplete="off">
+            <input type="text" name="message" placeholder="Enter your message (A-Z)" autocomplete="off">
+            <br>
+            <button type="submit" name="encrypt">Encrypt</button>
+            <button type="submit" name="reset">Reset</button>
+        </form>
+
+        <div class="outputs">
+            <h2>Encrypted Outputs</h2>
+            {% if saved_outputs %}
+                {% for output in saved_outputs %}
+                <div class="output-item">
+                    <span>{{ output }}</span>
+                    <form method="POST" style="display: inline;">
+                        <input type="hidden" name="delete" value="{{ loop.index0 }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No outputs yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="rotor-visual">
+        <h2>Rotor Positions</h2>
+        {% for rotor in enigma.rotors %}
+        <div class="rotor">
+            Rotor {{ loop.index }}: {{ rotor.position }}
+            <div class="rotor-controls">
+                <form method="POST">
+                    <input type="hidden" name="rotor_index" value="{{ loop.index0 }}">
+                    <input type="hidden" name="direction" value="up">
+                    <button type="submit" name="adjust_rotor">▲</button>
+                </form>
+                <form method="POST">
+                    <input type="hidden" name="rotor_index" value="{{ loop.index0 }}">
+                    <input type="hidden" name="direction" value="down">
+                    <button type="submit" name="adjust_rotor">▼</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
