@@ -5,12 +5,6 @@ This is an electronic model of Enigma. You can change the rotors and encode and 
 First, you need to clone this repository:
 
 ```bash
-git clone git@github.com:lucyhmiller1/enigma.git
-```
-
-Or:
-
-```bash
 git clone https://github.com/lucyhmiller1/enigma.git
 ```
 
